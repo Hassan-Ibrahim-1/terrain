@@ -1,3 +1,14 @@
+# Terrain gen
+
+look over example.py and figure out what it does.
+rivers (meh water), trees
+try bringing over grass code to this
+shadows to make grass look better
+First person traversal, very basic collision
+
+better skybox (just blue sky is fine)
+
+mountains, snow, clouds
 # Winter Break stuff
 
  - SAT collision
