@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "terrain.hpp"
 
 class App : public Application {
 public:
@@ -6,5 +7,7 @@ public:
     void update() override;
     void cleanup() override;
 
+    PointLight& light = *new PointLight;
+    Terrain terrain;
 };
 

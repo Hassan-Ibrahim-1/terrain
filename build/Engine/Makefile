@@ -101,6 +101,7 @@ GENERATED += $(OBJDIR)/renderer.o
 GENERATED += $(OBJDIR)/scene.o
 GENERATED += $(OBJDIR)/shader.o
 GENERATED += $(OBJDIR)/skybox.o
+GENERATED += $(OBJDIR)/terrain.o
 GENERATED += $(OBJDIR)/test.o
 GENERATED += $(OBJDIR)/texture2d.o
 GENERATED += $(OBJDIR)/transform.o
@@ -137,6 +138,7 @@ OBJECTS += $(OBJDIR)/renderer.o
 OBJECTS += $(OBJDIR)/scene.o
 OBJECTS += $(OBJDIR)/shader.o
 OBJECTS += $(OBJDIR)/skybox.o
+OBJECTS += $(OBJDIR)/terrain.o
 OBJECTS += $(OBJDIR)/test.o
 OBJECTS += $(OBJDIR)/texture2d.o
 OBJECTS += $(OBJDIR)/transform.o
@@ -297,6 +299,9 @@ $(OBJDIR)/shader.o: ../../src/shader.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/skybox.o: ../../src/skybox.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/terrain.o: ../../src/terrain.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/texture2d.o: ../../src/texture2d.cpp

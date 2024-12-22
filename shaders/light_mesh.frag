@@ -86,6 +86,7 @@ void main() {
         result += calc_spot_light(spot_lights[i], normal, frag_pos, view_direction);
     }
 
+
     // FragColor = vec4(result, 1.0f);
     float gamma = 2.2;
     FragColor.rgb = pow(result.rgb, vec3(1.0/gamma));
