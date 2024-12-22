@@ -9,5 +9,7 @@ public:
 
     PointLight& light = *new PointLight;
     Terrain terrain;
+    Rect bounds;
+    int nvertices = 10000;
 };
 

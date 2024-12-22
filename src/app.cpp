@@ -5,13 +5,12 @@ void App::init() {
     scene.add_point_light(&light);
     light.position.y = 5;
 
-    Rect bounds;
     bounds.transform.scale = {
         10,
         1,
         10
     };
-    terrain.generate(90000, bounds);
+    terrain.generate(nvertices, bounds);
     terrain.gobj.transform.position = {
         -13,
         -5,
@@ -26,7 +25,11 @@ void App::update() {
         utils::imgui_point_light("light", light);
         utils::imgui_game_object("terrain", terrain.gobj);
 
-        // Terrain config
+        ImGui::Spacing();
+
+        if (ImGui::DragInt("nvertices", &nvertices, 2, 1)) {
+            terrain.generate(nvertices, bounds);
+        }
     }
 }
 
