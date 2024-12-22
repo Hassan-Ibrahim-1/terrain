@@ -16,11 +16,11 @@ layout (std140) uniform Matrices {
 uniform mat4 model; // converts vectors to world_space
 uniform mat3 inverse_model;
 
-// Ground and grass
-// Grass is above
 uniform float ground_boundary;
+uniform float water_boundary;
 uniform vec3 ground_color;
 uniform vec3 grass_color;
+uniform vec3 water_color;
 
 void main() {
     vec3 position = (model * vec4(a_position, 1)).xyz;
@@ -32,13 +32,12 @@ void main() {
     if (position.y > ground_boundary) {
         color = grass_color;
     }
-    else {
+    else if (position.y > water_boundary) {
         color = ground_color;
     }
+    else {
+        color = water_color;
+    }
     // color = vec3(1);
-
-    // normal = (inverse_view * a_normal);
-    // normal = normalize(inverse_view * a_normal);
-    // normal = normalize(mat3(transpose(inverse(model))) * a_normal);
 }
 

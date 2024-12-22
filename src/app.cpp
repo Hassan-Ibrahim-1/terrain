@@ -26,14 +26,16 @@ void App::init() {
     terrain.gobj.transform.position.x = terrain_pos.x;
     terrain.gobj.transform.position.x -= terrain.gobj.transform.scale.x * 1;
     terrain.gobj.material.shader = &terrain_shader;
-    terrain.gobj.material.shininess = 1000;
+    terrain.gobj.material.shininess = 4000;
 }
 
 void App::update() {
     if (engine::cursor_enabled) {
         ImGui::DragFloat("gr boundary", &ground_boundary, 0.01);
+        ImGui::DragFloat("wt boundary", &water_boundary, 0.01);
         utils::imgui_color_edit3("ground", ground_color);
         utils::imgui_color_edit3("grass", grass_color);
+        utils::imgui_color_edit3("water", water_color);
 
         utils::imgui_point_light("light", light);
 
@@ -75,8 +77,10 @@ void App::update() {
     );
 
     terrain_shader.set_float("ground_boundary", ground_boundary);
+    terrain_shader.set_float("water_boundary", water_boundary);
     terrain_shader.set_vec3("ground_color", ground_color.clamped_vec3());
     terrain_shader.set_vec3("grass_color", grass_color.clamped_vec3());
+    terrain_shader.set_vec3("water_color", water_color.clamped_vec3());
 }
 
 void App::cleanup() {
