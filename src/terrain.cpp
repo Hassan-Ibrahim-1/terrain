@@ -1,7 +1,7 @@
 #include "terrain.hpp"
 #include "SimplexNoise.hpp"
 
-void Terrain::generate(uint nvertices, const Rect& bounds) {
+void Terrain::generate(uint nvertices) {
     // already generated
     if (gobj.mesh_count() > 0) {
         gobj.meshes.front().delete_buffers();
@@ -17,7 +17,7 @@ void Terrain::generate(uint nvertices, const Rect& bounds) {
     uint nrows = 0;
     uint ncols = 0;
 
-    if (bounds.transform.scale.x > bounds.transform.scale.z) {
+    if (gobj.transform.scale.x > gobj.transform.scale.z) {
         nrows = f1 - 1;
         ncols = f2 - 1;
     }
@@ -27,13 +27,13 @@ void Terrain::generate(uint nvertices, const Rect& bounds) {
     }
 
     Transform vert_t;
-    vert_t.scale.x = bounds.transform.scale.x / ncols;
-    vert_t.scale.z = bounds.transform.scale.z / nrows;
+    vert_t.scale.x = gobj.transform.scale.x / ncols;
+    vert_t.scale.z = gobj.transform.scale.z / nrows;
 
-    vert_t.position.x = bounds.transform.scale.x + bounds.transform.position.x;
+    vert_t.position.x = gobj.transform.scale.x + gobj.transform.position.x;
     vert_t.position.x += vert_t.scale.x / 2;
 
-    vert_t.position.z = bounds.transform.scale.x + bounds.transform.position.z;
+    vert_t.position.z = gobj.transform.scale.x + gobj.transform.position.z;
     vert_t.position.z -= vert_t.scale.z / 2;
 
     float originalx = vert_t.position.x;

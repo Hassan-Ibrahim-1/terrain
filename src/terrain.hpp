@@ -5,7 +5,7 @@
 struct Terrain {
     Terrain() {}
 
-    void generate(uint nvertices, const Rect& bounds);
+    void generate(uint nvertices);
 
     GameObject& gobj = *new GameObject;
 

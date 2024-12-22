@@ -10,7 +10,6 @@ public:
     PointLight& light = *new PointLight;
     Terrain terrain;
     glm::vec3 terrain_pos;
-    Rect bounds;
 
     int nvertices = 10000;
 };
