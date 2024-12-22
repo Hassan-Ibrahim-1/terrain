@@ -1,6 +1,6 @@
 # Terrain gen
 
-Get rid of bounds and use terrain.gobj.transform
+-- Get rid of bounds and use terrain.gobj.transform
 -- figure out why scale moves the terrain - offset it?
 
 rivers (meh water), trees

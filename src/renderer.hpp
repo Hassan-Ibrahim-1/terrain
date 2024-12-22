@@ -26,6 +26,14 @@ public:
      * then add it to: init_shaders, reload_shaders & init_ubo
      */
 
+   /*
+    * When creating a custom shader:
+    * call add_to_shader and send_matricies_to_shader if needed
+    * if sending light data then call send_light_data for the shader each frame
+    * set material.shininess yourself if needed
+    * also set inverse_model yourself if needed
+    */
+
     // ** STATE **
     bool depth_view_enabled = false;
     bool depth_test_enabled = true;
@@ -75,6 +83,7 @@ public:
     void add_shader(Shader& shader);
     void send_matrices_to_shader(Shader& shader);
     void reload_shaders();
+    void send_light_data(Shader& shader);
 
     void set_matrices(const glm::mat4& view, const glm::mat4& projection);
 
@@ -230,7 +239,6 @@ private:
     void update_vbos();
 
     void init_shaders();
-    void send_light_data(Shader& shader);
 
     void init_screen_rect();
 
