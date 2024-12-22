@@ -1,6 +1,8 @@
 # Terrain gen
 
-look over example.py and figure out what it does.
+Get rid of bounds and use terrain.gobj.transform
+figure out why scale moves the terrain - offset it?
+
 rivers (meh water), trees
 try bringing over grass code to this
 shadows to make grass look better
