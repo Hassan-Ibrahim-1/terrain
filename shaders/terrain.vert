@@ -22,6 +22,7 @@ uniform vec3 ground_color;
 uniform vec3 grass_color;
 uniform vec3 water_color;
 
+// clip everythings thats 15 units above y = -1
 const vec4 plane = vec4(0, -1, 0, 15);
 
 void main() {
