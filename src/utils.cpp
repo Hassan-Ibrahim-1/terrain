@@ -107,7 +107,7 @@ void utils::imgui_line(const std::string& name, Line& line) {
 bool utils::imgui_game_object(const std::string& name, GameObject& obj) {
     bool transform_changed = false;
     imgui_color_edit3(name, obj.material.color);
-    ImGui::DragFloat((name + "shine").c_str(), &obj.material.shininess);
+    ImGui::DragFloat((name + " shine").c_str(), &obj.material.shininess);
     transform_changed = imgui_transform(name, obj.transform);
     ImGui::Checkbox((name + " hidden").c_str(), &obj.hidden);
     return transform_changed;

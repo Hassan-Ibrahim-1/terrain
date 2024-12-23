@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "app.hpp"
+#include "debug.hpp"
 #include "framebuffer.hpp"
 #include "utils.hpp"
 #include <cstdlib>
@@ -41,18 +42,28 @@ void App::init() {
     // Framebuffer
     ColorAttachmentCreateInfo cinfo;
     cinfo.format = GL_RGB;
-    fb.create_color_attachment(cinfo);
-    fb.create_rbo_attachment({});
-    ASSERT(fb.is_complete(), "fbo is not complete");
-    renderer.set_framebuffer(fb);
+    reflection_fb.create_color_attachment(cinfo);
+    reflection_fb.create_rbo_attachment({});
+    ASSERT(reflection_fb.is_complete(), "fbo is not complete");
 
-    scene.add_primitive(&fb_rect);
-    fb_rect.material.create_diffuse_texture();
+    refraction_fb.create_color_attachment(cinfo);
+    refraction_fb.create_rbo_attachment({});
+    ASSERT(refraction_fb.is_complete(), "fbo is not complete");
+
+    // TODO: there is no need for water boundary
+    // just use y component of water_rect's transform
+
+    scene.add_primitive(&reflection_rect);
+    reflection_rect.material.create_diffuse_texture();
+    scene.add_primitive(&refraction_rect);
+    refraction_rect.material.create_diffuse_texture();
+    refraction_rect.transform.position.x = -2;
 }
 
 void App::update() {
     if (engine::cursor_enabled) {
-        utils::imgui_rect("fb rect", fb_rect);
+        utils::imgui_rect("refl rect", reflection_rect);
+        utils::imgui_rect("refra rect", refraction_rect);
         utils::imgui_rect("water rect", water_rect);
 
         ImGui::DragFloat("gr boundary", &ground_boundary, 0.01);
@@ -113,13 +124,35 @@ void App::update() {
     glEnable(GL_CLIP_DISTANCE0);
 
     water_rect.hidden = true;
-    fb_rect.hidden = true;
-    renderer.set_framebuffer(fb);
-    renderer.render();
-    renderer.render_framebuffer(fb, &fb_rect.material.diffuse_textures.front());
+    reflection_rect.hidden = true;
+    refraction_rect.hidden = true;
 
+    reflection_clip_plane = {
+        0, 1, 0, -water_boundary
+    };
+    refraction_clip_plane = {
+        0, -1, 0, water_boundary
+    };
+
+    // reflection texture
+    terrain_shader.set_vec4("clip_plane", reflection_clip_plane);
+    renderer.set_framebuffer(reflection_fb);
+    renderer.render();
+    renderer.render_framebuffer(reflection_fb, &reflection_rect.material.diffuse_textures.front());
+
+    // refraction texture
+    terrain_shader.use();
+    terrain_shader.set_vec4("clip_plane", refraction_clip_plane);
+    renderer.set_framebuffer(refraction_fb);
+    renderer.render();
+    renderer.render_framebuffer(refraction_fb, &refraction_rect.material.diffuse_textures.front());
+
+
+    // regular scene
+    glDisable(GL_CLIP_DISTANCE0);
     water_rect.hidden = false;
-    fb_rect.hidden = false;
+    reflection_rect.hidden = false;
+    refraction_rect.hidden = false;
     renderer.reset_framebuffer();
     renderer.render();
 }

@@ -10,8 +10,12 @@ public:
     PointLight& light = *new PointLight;
 
     // Scene without water rect
-    Framebuffer fb = Framebuffer(window.width(), window.height());
-    Rect& fb_rect = *new Rect;
+    Framebuffer reflection_fb = Framebuffer(window.width(), window.height());
+    Framebuffer refraction_fb = Framebuffer(window.width(), window.height());
+    Rect& reflection_rect = *new Rect;
+    Rect& refraction_rect = *new Rect;
+    glm::vec4 reflection_clip_plane;
+    glm::vec4 refraction_clip_plane;
     
     Shader terrain_shader;
     Terrain terrain;

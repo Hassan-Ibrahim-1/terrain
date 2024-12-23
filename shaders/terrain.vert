@@ -22,13 +22,14 @@ uniform vec3 ground_color;
 uniform vec3 grass_color;
 uniform vec3 water_color;
 
-// clip everythings thats 15 units above y = -1
-const vec4 plane = vec4(0, -1, 0, 15);
+// y: start
+// w: distance
+uniform vec4 clip_plane;
 
 void main() {
     vec4 position = (model * vec4(a_position, 1));
 
-    gl_ClipDistance[0] = dot(position, plane);
+    gl_ClipDistance[0] = dot(position, clip_plane);
 
     gl_Position = projection * view * position;
     frag_pos = vec3(position);
