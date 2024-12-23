@@ -106,6 +106,13 @@ public:
 
     void clear_screen();
 
+    // renders a framebuffer to a rect
+    // doesn't reset current framebuffer
+    // if a user framebuffer is set, it renders to that
+    // if none is set than it renders to the screen
+    // doesn't bind or unbind any framebuffers
+    void render_framebuffer(Framebuffer& fb, std::optional<Texture2D*> texture = std::nullopt);
+
 private:
     std::optional<Framebuffer*> _user_framebuffer;
 
@@ -250,6 +257,5 @@ private:
     // is set should probably just go back to the previous
     // depth function instead
     void render_skybox(Skybox& skybox);
-    void render_framebuffer(Framebuffer& fb);
 };
 

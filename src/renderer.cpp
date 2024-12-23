@@ -139,11 +139,9 @@ void Renderer::render() {
     ASSERT(main_camera != nullptr, "Renderer::main_camera is a nullptr");
     ASSERT(main_scene != nullptr, "Renderer::main_scene is a nullptr");
 
-    // ** RENDER CALLS **
-    //
-
     if (_user_framebuffer.has_value()) {
         ASSERT(_user_framebuffer.value()->is_complete(), "incomplete user framebuffer");
+        // Gets unbound at the end of each frame
         _user_framebuffer.value()->bind();
 
         // Probably bad to have this here
@@ -151,7 +149,7 @@ void Renderer::render() {
         glEnable(GL_DEPTH_TEST);
     }
 
-
+    // ** RENDER CALLS **
     render_points();
     render_lines();
     render_game_objects();
@@ -165,9 +163,7 @@ void Renderer::render() {
 
     if (_user_framebuffer.has_value()) {
         _user_framebuffer.value()->unbind();
-        render_framebuffer(*_user_framebuffer.value());
-        // HACK: just gets the first color attachment
-        // fb might have more than one color attachments
+        /*render_framebuffer(*_user_framebuffer.value());*/
     }
 }
 
@@ -403,30 +399,49 @@ void Renderer::render_skybox(Skybox& skybox) {
     }
 }
 
-void Renderer::render_framebuffer(Framebuffer& fb) {
+void Renderer::render_framebuffer(Framebuffer& fb, std::optional<Texture2D*> tex) {
     ASSERT(fb.is_complete(), "incomplete framebuffer provided");
-    
-    // _screen_rect only has one texture
-    // that being the contents of whatever framebuffer is being rendered
-    if (_screen_rect.material.diffuse_texture_count() > 0) {
-        // HACK: only renders the first color attachment
-        // probably shouldn't be like this if there are multiple color attachments
-        _screen_rect.material.diffuse_textures.front() = Texture2D(fb.get_color_attachment_by_index(0));
+
+    Texture2D* texture;
+
+    if (tex) {
+        texture = tex.value();
     }
     else {
-        auto& t = _screen_rect.material.create_diffuse_texture();
-        t = Texture2D(fb.get_color_attachment_by_index(0));
+        // _screen_rect only has one texture
+        // that being the contents of whatever framebuffer is being rendered
+        if (_screen_rect.material.diffuse_texture_count() > 0) {
+            texture = &_screen_rect.material.diffuse_textures.front();
+        }
+        else {
+            auto& t = _screen_rect.material.create_diffuse_texture();
+            t = Texture2D(fb.get_color_attachment_by_index(0));
+            texture = &t;
+        }
     }
-
+    
+    // HACK: only renders the first color attachment
+    // probably shouldn't be like this if there are multiple color attachments
+     *texture = Texture2D(fb.get_color_attachment_by_index(0));
 
     glDisable(GL_DEPTH_TEST);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glActiveTexture(GL_TEXTURE0);
-    _screen_rect.material.diffuse_textures.front().bind();
+    texture->bind();
     shaders.screen.use();
     shaders.screen.set_int("screen_texture", 0);
     /*LOG("error: %u", glGetError());*/
-    render_mesh(_screen_rect.meshes.front());
+    /*render_mesh(_screen_rect.meshes.front());*/
+
+    if (depth_test_enabled) {
+        glEnable(GL_DEPTH_TEST);
+    }
+    if (wireframe_enabled) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 }
 
 void Renderer::render_mesh(const Mesh& mesh) {

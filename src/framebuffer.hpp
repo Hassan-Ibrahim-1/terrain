@@ -14,7 +14,17 @@
 
 // NOTE: just provide width / height
 // HACK: width and height is multiplied by 2 because of macos
+
+/*
+ * To create a framebuffer
+ * First call the Framebuffer(width, height) constructor,
+ * then call create_color_attachment and create_rbo_attachment
+ * then call is_complete
+*/
+
 struct ColorAttachmentCreateInfo {
+    // GL_RGB, etc
+    // TODO: this should have a custom enum class
     int format;
     int type = GL_UNSIGNED_BYTE;
     int min_texture_filter = GL_LINEAR;

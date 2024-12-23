@@ -9,6 +9,10 @@ public:
 
     PointLight& light = *new PointLight;
 
+    // Scene without water rect
+    Framebuffer fb = Framebuffer(window.width(), window.height());
+    Rect& fb_rect = *new Rect;
+    
     Shader terrain_shader;
     Terrain terrain;
     glm::vec3 terrain_pos;

@@ -1,7 +1,11 @@
 #include "app.hpp"
+#include "framebuffer.hpp"
 #include "utils.hpp"
+#include <cstdlib>
 
 void App::init() {
+    engine::render_after_user_update = false;
+
     scene.add_point_light(&light);
     light.position.y = 5;
 
@@ -32,10 +36,22 @@ void App::init() {
     water_rect.transform.rotation.pitch = -90;
     water_rect.material.color = water_color;
     update_water_rect();
+
+    // Framebuffer
+    ColorAttachmentCreateInfo cinfo;
+    cinfo.format = GL_RGB;
+    fb.create_color_attachment(cinfo);
+    fb.create_rbo_attachment({});
+    ASSERT(fb.is_complete(), "fbo is not complete");
+    renderer.set_framebuffer(fb);
+
+    scene.add_primitive(&fb_rect);
+    fb_rect.material.create_diffuse_texture();
 }
 
 void App::update() {
     if (engine::cursor_enabled) {
+        utils::imgui_rect("fb rect", fb_rect);
         utils::imgui_rect("water rect", water_rect);
 
         ImGui::DragFloat("gr boundary", &ground_boundary, 0.01);
@@ -92,6 +108,17 @@ void App::update() {
     terrain_shader.set_vec3("ground_color", ground_color.clamped_vec3());
     terrain_shader.set_vec3("grass_color", grass_color.clamped_vec3());
     terrain_shader.set_vec3("water_color", water_color.clamped_vec3());
+
+    water_rect.hidden = true;
+    fb_rect.hidden = true;
+    renderer.set_framebuffer(fb);
+    renderer.render();
+    renderer.render_framebuffer(fb, &fb_rect.material.diffuse_textures.front());
+
+    water_rect.hidden = false;
+    fb_rect.hidden = false;
+    renderer.reset_framebuffer();
+    renderer.render();
 }
 
 void App::cleanup() {
