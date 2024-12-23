@@ -22,11 +22,15 @@ uniform vec3 ground_color;
 uniform vec3 grass_color;
 uniform vec3 water_color;
 
-void main() {
-    vec3 position = (model * vec4(a_position, 1)).xyz;
+const vec4 plane = vec4(0, -1, 0, 15);
 
-    gl_Position = projection * view * vec4(position, 1);
-    frag_pos = vec3(model * vec4(a_position, 1.0f));
+void main() {
+    vec4 position = (model * vec4(a_position, 1));
+
+    gl_ClipDistance[0] = dot(position, plane);
+
+    gl_Position = projection * view * position;
+    frag_pos = vec3(position);
     normal = normalize(inverse_model * a_normal);
 
     if (position.y > ground_boundary) {

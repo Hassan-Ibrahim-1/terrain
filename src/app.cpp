@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include "app.hpp"
 #include "framebuffer.hpp"
 #include "utils.hpp"
@@ -108,6 +109,8 @@ void App::update() {
     terrain_shader.set_vec3("ground_color", ground_color.clamped_vec3());
     terrain_shader.set_vec3("grass_color", grass_color.clamped_vec3());
     terrain_shader.set_vec3("water_color", water_color.clamped_vec3());
+
+    glEnable(GL_CLIP_DISTANCE0);
 
     water_rect.hidden = true;
     fb_rect.hidden = true;
