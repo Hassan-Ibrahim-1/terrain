@@ -3,6 +3,14 @@
 -- Get rid of bounds and use terrain.gobj.transform
 -- figure out why scale moves the terrain - offset it?
 
+Water:
+separate water shader
+color ground blue in the first pass. have a second
+framebuffer that runs the water shader that takes in the water boundary
+draw water then. reflections would be nice. speculars from directional light
+planar reflections?
+
+
 rivers (meh water), trees
 try bringing over grass code to this
 shadows to make grass look better

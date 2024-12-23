@@ -8,9 +8,11 @@ public:
     void cleanup() override;
 
     PointLight& light = *new PointLight;
+
     Shader terrain_shader;
     Terrain terrain;
     glm::vec3 terrain_pos;
+    Rect& water_rect = *new Rect;
 
     float ground_boundary = 0.0;
     float water_boundary = -0.5;
@@ -19,5 +21,7 @@ public:
     Color water_color = Color(43, 142, 204);
 
     int nvertices = 100000;
+
+    void update_water_rect();
 };
 

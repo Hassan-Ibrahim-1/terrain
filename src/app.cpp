@@ -27,12 +27,21 @@ void App::init() {
     terrain.gobj.transform.position.x -= terrain.gobj.transform.scale.x * 1;
     terrain.gobj.material.shader = &terrain_shader;
     terrain.gobj.material.shininess = 4000;
+
+    scene.add_primitive(&water_rect);
+    water_rect.transform.rotation.pitch = -90;
+    water_rect.material.color = water_color;
+    update_water_rect();
 }
 
 void App::update() {
     if (engine::cursor_enabled) {
+        utils::imgui_rect("water rect", water_rect);
+
         ImGui::DragFloat("gr boundary", &ground_boundary, 0.01);
-        ImGui::DragFloat("wt boundary", &water_boundary, 0.01);
+        if (ImGui::DragFloat("wt boundary", &water_boundary, 0.01)) {
+            update_water_rect();
+        }
         utils::imgui_color_edit3("ground", ground_color);
         utils::imgui_color_edit3("grass", grass_color);
         utils::imgui_color_edit3("water", water_color);
@@ -45,10 +54,12 @@ void App::update() {
             terrain.gobj.transform.position.z = terrain_pos.z;
             terrain.gobj.transform.position.x = terrain_pos.x;
             terrain.gobj.transform.position.x -= terrain.gobj.transform.scale.x * 1;
+            update_water_rect();
         }
         if (ImGui::DragFloat3("terrain scale", (float*)&terrain.gobj.transform.scale)) {
             terrain.gobj.transform.position.x = terrain_pos.x;
             terrain.gobj.transform.position.x -= terrain.gobj.transform.scale.x * 1;
+            update_water_rect();
         }
         ImGui::DragFloat3("terrain rotation", (float*)&terrain.gobj.transform.rotation);
         ImGui::DragFloat("shine", &terrain.gobj.material.shininess);
@@ -85,5 +96,15 @@ void App::update() {
 
 void App::cleanup() {
 
+}
+
+void App::update_water_rect() {
+    water_rect.transform.scale = terrain.gobj.transform.scale;
+    water_rect.transform.position =
+        terrain.gobj.transform.position + terrain.gobj.transform.scale / 2.0f;
+    // idk why this is 1.5
+    water_rect.transform.position.x =
+        terrain.gobj.transform.position.x + terrain.gobj.transform.scale.x * 1.5;
+    water_rect.transform.position.y = water_boundary;
 }
 
