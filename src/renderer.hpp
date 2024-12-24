@@ -83,7 +83,11 @@ public:
     void add_shader(Shader& shader);
     void send_matrices_to_shader(Shader& shader);
     void reload_shaders();
+
     void send_light_data(Shader& shader);
+    // Expects textures to be formatted as:
+    // material.diffuse_textures'i'
+    void send_texture_data(Material& mat, Shader& shader);
 
     // call this if you update camera position mid frame
     // or else the view matrix will stay the same

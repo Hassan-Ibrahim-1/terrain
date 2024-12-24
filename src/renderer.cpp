@@ -270,27 +270,7 @@ void Renderer::render_game_objects() {
                     );
                     /*send_light_data(*shader);*/
                 }
-                for (int i = 0; i < obj->material.diffuse_texture_count(); i++) {
-                    // TODO: is this GL_TEXTURE0 and GL_TEXTURE1 stuff right?
-                    // doesn't that just get overwritten on the iteration?
-                    glActiveTexture(GL_TEXTURE0 + i);
-                    obj->material.diffuse_textures[i].bind();
-                    shader->set_int(
-                        "material.diffuse_texture" + std::to_string(i + 1),
-                        i
-                    );
-                }
-                /*LOG("before error: %u", glGetError());*/
-                for (int i = 0; i < obj->material.specular_texture_count(); i++) {
-                    // is this okay?
-                    // loading both specular and diffuse textures with the same active texture
-                    glActiveTexture(GL_TEXTURE0 + i);
-                    obj->material.specular_textures[i].bind();
-                    shader->set_int(
-                        "material.specular_texture" + std::to_string(i + 1),
-                        i
-                    );
-                }
+                send_texture_data(obj->material, *shader);
             }
             // Textureless Lighting
             else {
@@ -742,6 +722,30 @@ void Renderer::send_light_data(Shader& shader) {
         auto& light = scene.directional_lights[i];
         std::string name = "dir_lights[" + std::to_string(i) + "]";
         light->send_to_shader(name, shader);
+    }
+}
+
+void Renderer::send_texture_data(Material& mat, Shader& shader) {
+    shader.use();
+    for (int i = 0; i < mat.diffuse_texture_count(); i++) {
+        // TODO: is this GL_TEXTURE0 and GL_TEXTURE1 stuff right?
+        // doesn't that just get overwritten on the iteration?
+        glActiveTexture(GL_TEXTURE0 + i);
+        mat.diffuse_textures[i].bind();
+        shader.set_int(
+            "material.texture_diffuse" + std::to_string(i + 1),
+            i
+        );
+    }
+    for (int i = 0; i < mat.specular_texture_count(); i++) {
+        // is this okay?
+        // loading both specular and diffuse textures with the same active texture
+        glActiveTexture(GL_TEXTURE0 + i);
+        mat.specular_textures[i].bind();
+        shader.set_int(
+            "material.texture_specular" + std::to_string(i + 1),
+            i
+        );
     }
 }
 

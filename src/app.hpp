@@ -16,6 +16,8 @@ public:
     Rect& refraction_rect = *new Rect;
     glm::vec4 reflection_clip_plane;
     glm::vec4 refraction_clip_plane;
+
+    Shader water_shader;
     
     Shader terrain_shader;
     Terrain terrain;
@@ -33,5 +35,6 @@ public:
     void update_water_rect();
     void create_reflection_texture();
     void create_refraction_texture();
+    void set_water_rect_textures();
 };
 

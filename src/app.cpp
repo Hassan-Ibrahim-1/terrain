@@ -4,6 +4,7 @@
 #include "framebuffer.hpp"
 #include "utils.hpp"
 #include <cstdlib>
+#include <optional>
 
 void App::init() {
     engine::render_after_user_update = false;
@@ -25,9 +26,17 @@ void App::init() {
         "shaders/terrain.vert",
         "shaders/terrain.frag"
     );
+    
+    water_shader.load(
+        "shaders/water.vert",
+        "shaders/water.frag"
+    );
 
     renderer.add_shader(terrain_shader);
     renderer.send_matrices_to_shader(terrain_shader);
+
+    renderer.add_shader(water_shader);
+    renderer.send_matrices_to_shader(water_shader);
 
     terrain.gobj.transform.position.x = terrain_pos.x;
     terrain.gobj.transform.position.x -= terrain.gobj.transform.scale.x * 1;
@@ -58,6 +67,9 @@ void App::init() {
     scene.add_primitive(&refraction_rect);
     refraction_rect.material.create_diffuse_texture();
     refraction_rect.transform.position.x = -2;
+    
+    water_rect.material.create_diffuse_texture();
+    water_rect.material.create_diffuse_texture();
 }
 
 void App::update() {
@@ -137,6 +149,19 @@ void App::update() {
     create_reflection_texture();
     create_refraction_texture();
 
+    // this is dumb
+    water_rect.material.shader = &water_shader;
+    set_water_rect_textures();
+    renderer.send_texture_data(water_rect.material, water_shader);
+
+    // send water textures
+    /*water_shader.use();*/
+    /*glActiveTexture(GL_TEXTURE0);*/
+    /*water_rect.material.diffuse_textures[0].bind();*/
+    /*water_shader.set_int(*/
+    /*    "material.diffuse_texture1", 0*/
+    /*);*/
+
     // regular scene
     glDisable(GL_CLIP_DISTANCE0);
     water_rect.hidden = false;
@@ -162,7 +187,6 @@ void App::update_water_rect() {
 
 void App::create_reflection_texture() {
     float dist = 2 * (camera.transform.position.y - water_boundary);
-    LOG("dist: %f", dist);
     camera.transform.position.y -= dist;
     camera.invert_pitch();
 
@@ -186,5 +210,10 @@ void App::create_refraction_texture() {
     renderer.set_framebuffer(refraction_fb);
     renderer.render();
     renderer.render_framebuffer(refraction_fb, &refraction_rect.material.diffuse_textures.front());
+}
+
+void App::set_water_rect_textures() {
+    water_rect.material.diffuse_textures[0] = { reflection_rect.material.diffuse_textures.front().ID };
+    water_rect.material.diffuse_textures[1] = { refraction_rect.material.diffuse_textures.front().ID };
 }
 
