@@ -13,11 +13,13 @@ struct Material {
 };
 
 uniform sampler2D flow_map;
+uniform sampler2D water_normal;
 uniform Material material;
 uniform float move_factor;
 uniform float reflection_strength;
 
-const float distortion_strength = 0.02;
+const float distortion_strength = 0.01;
+const float wave_strength = 0.02;
 
 vec3 flow_uvw(vec2 uv, vec2 flow_vector, float time);
 
@@ -30,14 +32,14 @@ void main() {
     float transparency = dot(view_pos, normal);
     transparency = pow(transparency, reflection_strength);
 
-    vec2 distortion1 =
-        (texture(flow_map, vec2(tex_coords.x + move_factor, tex_coords.y)).rg * 2.0) - 1.0;
-    distortion1 *= distortion_strength;
-    vec2 distortion2 =
-        (texture(flow_map, vec2(-tex_coords.x + move_factor, tex_coords.y + move_factor)).rg * 2.0) - 1.0;
-    distortion2 *= distortion_strength;
+    vec2 distorted_tex_coords =
+        texture(flow_map, vec2(tex_coords.x + move_factor, tex_coords.y)).rg;
+    distorted_tex_coords *= distortion_strength;
+    distorted_tex_coords =
+        tex_coords + vec2(distorted_tex_coords.x, distorted_tex_coords.y + move_factor);
 
-    vec2 total_distortion = distortion1 + distortion2;
+    vec2 total_distortion = texture(flow_map, distorted_tex_coords).rg * 2.0 - 1.0;
+    total_distortion *= wave_strength;
 
     vec2 reflection_uv = vec2(ndc.x, -ndc.y) + total_distortion;
     vec2 refraction_uv = ndc + total_distortion;

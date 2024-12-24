@@ -73,6 +73,7 @@ void App::init() {
     water_rect.material.create_diffuse_texture();
 
     flow_map = Texture2D("textures/flow_map.png");
+    normal_map = Texture2D("textures/water_normal2.png");
 }
 
 void App::update() {
@@ -160,6 +161,7 @@ void App::update() {
     set_water_rect_textures();
     renderer.send_texture_data(water_rect.material, water_shader);
     renderer.send_texture_data(flow_map, water_shader, "flow_map", 2);
+    renderer.send_texture_data(normal_map , water_shader, "normal_map", 3);
 
     move_factor += wave_speed * sin(glfwGetTime());
     water_shader.set_float("move_factor", move_factor);
@@ -177,6 +179,7 @@ void App::update() {
 
 void App::cleanup() {
     flow_map.unload();
+    normal_map.unload();
 }
 
 void App::update_water_rect() {

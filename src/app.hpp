@@ -18,6 +18,7 @@ public:
     glm::vec4 refraction_clip_plane;
 
     Texture2D flow_map;
+    Texture2D normal_map;
 
     Shader water_shader;
     
