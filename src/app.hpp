@@ -41,5 +41,6 @@ public:
 
     float move_factor = 0.0f;
     float wave_speed = 0.00009f;
+    float reflection_strength = 2.0f;
 };
 

@@ -78,6 +78,7 @@ void App::init() {
 void App::update() {
     if (engine::cursor_enabled) {
         ImGui::DragFloat("wave speed", &wave_speed, 0.001);
+        ImGui::DragFloat("refl strength", &reflection_strength, 0.1);
 
         utils::imgui_rect("refl rect", reflection_rect);
         utils::imgui_rect("refra rect", refraction_rect);
@@ -162,6 +163,7 @@ void App::update() {
 
     move_factor += wave_speed * sin(glfwGetTime());
     water_shader.set_float("move_factor", move_factor);
+    water_shader.set_float("reflection_strength", reflection_strength);
     water_shader.set_vec3("camera_position", camera.transform.position);
 
     // regular scene

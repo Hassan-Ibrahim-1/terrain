@@ -15,6 +15,7 @@ struct Material {
 uniform sampler2D flow_map;
 uniform Material material;
 uniform float move_factor;
+uniform float reflection_strength;
 
 const float distortion_strength = 0.02;
 
@@ -27,6 +28,7 @@ void main() {
     vec3 normal = vec3(0.0f, 1.0f, 0.0f);
     vec3 view_pos = normalize(to_camera);
     float transparency = dot(view_pos, normal);
+    transparency = pow(transparency, reflection_strength);
 
     vec2 distortion1 =
         (texture(flow_map, vec2(tex_coords.x + move_factor, tex_coords.y)).rg * 2.0) - 1.0;
