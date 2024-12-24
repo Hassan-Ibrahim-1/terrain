@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "app.hpp"
 #include "debug.hpp"
 #include "framebuffer.hpp"
@@ -45,7 +46,7 @@ void App::init() {
 
     scene.add_primitive(&water_rect);
     water_rect.transform.rotation.pitch = -90;
-    water_rect.material.color = water_color;
+    water_rect.material.color = Color(167, 197, 217);
     update_water_rect();
 
     // Framebuffer
@@ -70,10 +71,14 @@ void App::init() {
     
     water_rect.material.create_diffuse_texture();
     water_rect.material.create_diffuse_texture();
+
+    flow_map = Texture2D("textures/flow_map.png");
 }
 
 void App::update() {
     if (engine::cursor_enabled) {
+        ImGui::DragFloat("wave speed", &wave_speed, 0.001);
+
         utils::imgui_rect("refl rect", reflection_rect);
         utils::imgui_rect("refra rect", refraction_rect);
         utils::imgui_rect("water rect", water_rect);
@@ -153,14 +158,11 @@ void App::update() {
     water_rect.material.shader = &water_shader;
     set_water_rect_textures();
     renderer.send_texture_data(water_rect.material, water_shader);
+    renderer.send_texture_data(flow_map, water_shader, "flow_map", 2);
 
-    // send water textures
-    /*water_shader.use();*/
-    /*glActiveTexture(GL_TEXTURE0);*/
-    /*water_rect.material.diffuse_textures[0].bind();*/
-    /*water_shader.set_int(*/
-    /*    "material.diffuse_texture1", 0*/
-    /*);*/
+    move_factor += wave_speed * sin(glfwGetTime());
+    water_shader.set_float("move_factor", move_factor);
+    water_shader.set_vec3("camera_position", camera.transform.position);
 
     // regular scene
     glDisable(GL_CLIP_DISTANCE0);
@@ -172,7 +174,7 @@ void App::update() {
 }
 
 void App::cleanup() {
-
+    flow_map.unload();
 }
 
 void App::update_water_rect() {

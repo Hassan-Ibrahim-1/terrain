@@ -88,6 +88,7 @@ public:
     // Expects textures to be formatted as:
     // material.diffuse_textures'i'
     void send_texture_data(Material& mat, Shader& shader);
+    void send_texture_data(Texture2D& texture, Shader& shader, const std::string& name, int bind_location);
 
     // call this if you update camera position mid frame
     // or else the view matrix will stay the same

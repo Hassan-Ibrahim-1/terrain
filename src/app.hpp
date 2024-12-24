@@ -17,6 +17,8 @@ public:
     glm::vec4 reflection_clip_plane;
     glm::vec4 refraction_clip_plane;
 
+    Texture2D flow_map;
+
     Shader water_shader;
     
     Shader terrain_shader;
@@ -36,5 +38,8 @@ public:
     void create_reflection_texture();
     void create_refraction_texture();
     void set_water_rect_textures();
+
+    float move_factor = 0.0f;
+    float wave_speed = 0.00009f;
 };
 

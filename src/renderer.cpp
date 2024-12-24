@@ -749,6 +749,16 @@ void Renderer::send_texture_data(Material& mat, Shader& shader) {
     }
 }
 
+void Renderer::send_texture_data(Texture2D& texture, Shader& shader, const std::string& name, int bind_location) {
+    shader.use();
+    glActiveTexture(GL_TEXTURE0 + bind_location);
+    texture.bind();
+    shader.set_int(
+        name,
+        bind_location
+    );
+}
+
 void Renderer::generate_circle_vertices() {
     static constexpr float two_pi = M_PI * 2;
     static constexpr float radius = 0.5f;
