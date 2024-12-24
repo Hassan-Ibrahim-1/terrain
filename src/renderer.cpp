@@ -97,6 +97,13 @@ void Renderer::set_matrices(const glm::mat4& view, const glm::mat4& projection) 
     shaders.skybox.set_mat4("projection", projection);
 }
 
+void Renderer::update_matrices() {
+    set_matrices(
+        main_camera->get_view_matrix(),
+        main_camera->get_perspective_matrix()
+    );
+}
+
 void Renderer::start_frame() {
     ASSERT(main_camera != nullptr, "Renderer::main_camera is a nullptr");
     ASSERT(main_scene != nullptr, "Renderer::main_scene is a nullptr");

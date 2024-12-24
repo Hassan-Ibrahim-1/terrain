@@ -69,6 +69,7 @@ public:
     // Points the camera backwords
     void look_back();
     void set_rotation(float yaw, float pitch);
+    void invert_pitch();
 
     void update_vectors();
 

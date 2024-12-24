@@ -1,8 +1,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "debug.hpp"
 #include "camera.hpp"
-#include "imgui.h"
 #include "transform.hpp"
 
 Camera::Camera(Transform transform, glm::vec3 world_up)
@@ -33,7 +31,7 @@ void Camera::process_keyboard(CameraDirection direction, float delta_time) {
     if (_locked) {
         return;
     }
-    static const float vertical_multiplier = 5.0f;
+    static constexpr float vertical_multiplier = 5.0f;
 
     float speed = velocity * delta_time;
 
@@ -102,6 +100,11 @@ void Camera::look_back() {
 void Camera::set_rotation(float yaw, float pitch) {
     transform.rotation.yaw = yaw;
     transform.rotation.pitch = pitch;
+    update_vectors();
+}
+
+void Camera::invert_pitch() {
+    transform.rotation.pitch = -transform.rotation.pitch;
     update_vectors();
 }
 

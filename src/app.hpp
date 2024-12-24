@@ -31,5 +31,7 @@ public:
     int nvertices = 100000;
 
     void update_water_rect();
+    void create_reflection_texture();
+    void create_refraction_texture();
 };
 

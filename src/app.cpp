@@ -134,19 +134,8 @@ void App::update() {
         0, -1, 0, water_boundary
     };
 
-    // reflection texture
-    terrain_shader.set_vec4("clip_plane", reflection_clip_plane);
-    renderer.set_framebuffer(reflection_fb);
-    renderer.render();
-    renderer.render_framebuffer(reflection_fb, &reflection_rect.material.diffuse_textures.front());
-
-    // refraction texture
-    terrain_shader.use();
-    terrain_shader.set_vec4("clip_plane", refraction_clip_plane);
-    renderer.set_framebuffer(refraction_fb);
-    renderer.render();
-    renderer.render_framebuffer(refraction_fb, &refraction_rect.material.diffuse_textures.front());
-
+    create_reflection_texture();
+    create_refraction_texture();
 
     // regular scene
     glDisable(GL_CLIP_DISTANCE0);
@@ -169,5 +158,33 @@ void App::update_water_rect() {
     water_rect.transform.position.x =
         terrain.gobj.transform.position.x + terrain.gobj.transform.scale.x * 1.5;
     water_rect.transform.position.y = water_boundary;
+}
+
+void App::create_reflection_texture() {
+    float dist = 2 * (camera.transform.position.y - water_boundary);
+    LOG("dist: %f", dist);
+    camera.transform.position.y -= dist;
+    camera.invert_pitch();
+
+    renderer.update_matrices();
+
+    terrain_shader.use();
+    terrain_shader.set_vec4("clip_plane", reflection_clip_plane);
+    renderer.set_framebuffer(reflection_fb);
+    renderer.render();
+    renderer.render_framebuffer(reflection_fb, &reflection_rect.material.diffuse_textures.front());
+
+    camera.transform.position.y += dist;
+    camera.invert_pitch();
+
+    renderer.update_matrices();
+}
+
+void App::create_refraction_texture() {
+    terrain_shader.use();
+    terrain_shader.set_vec4("clip_plane", refraction_clip_plane);
+    renderer.set_framebuffer(refraction_fb);
+    renderer.render();
+    renderer.render_framebuffer(refraction_fb, &refraction_rect.material.diffuse_textures.front());
 }
 

@@ -85,6 +85,9 @@ public:
     void reload_shaders();
     void send_light_data(Shader& shader);
 
+    // call this if you update camera position mid frame
+    // or else the view matrix will stay the same
+    void update_matrices();
     void set_matrices(const glm::mat4& view, const glm::mat4& projection);
 
     // Actually render all draw calls
