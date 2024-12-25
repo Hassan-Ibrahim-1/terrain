@@ -39,6 +39,7 @@ public:
     void create_reflection_texture();
     void create_refraction_texture();
     void set_water_rect_textures();
+    void send_pointlight_data();
 
     float move_factor = 0.0f;
     float wave_speed = 0.00009f;

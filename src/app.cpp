@@ -162,11 +162,13 @@ void App::update() {
     renderer.send_texture_data(water_rect.material, water_shader);
     renderer.send_texture_data(flow_map, water_shader, "flow_map", 2);
     renderer.send_texture_data(normal_map , water_shader, "normal_map", 3);
+    renderer.send_light_data(water_shader);
 
     move_factor += wave_speed * sin(glfwGetTime());
     water_shader.set_float("move_factor", move_factor);
     water_shader.set_float("reflection_strength", reflection_strength);
     water_shader.set_vec3("camera_position", camera.transform.position);
+    send_pointlight_data();
 
     // regular scene
     glDisable(GL_CLIP_DISTANCE0);
@@ -222,5 +224,9 @@ void App::create_refraction_texture() {
 void App::set_water_rect_textures() {
     water_rect.material.diffuse_textures[0] = { reflection_rect.material.diffuse_textures.front().ID };
     water_rect.material.diffuse_textures[1] = { refraction_rect.material.diffuse_textures.front().ID };
+}
+
+void App::send_pointlight_data() {
+    light.send_to_shader("pointlight", water_shader);
 }
 

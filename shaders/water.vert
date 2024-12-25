@@ -7,6 +7,7 @@ layout (location = 2) in vec2 a_tex_coords;
 out vec4 clip_space;
 out vec2 tex_coords;
 out vec3 to_camera;
+out vec3 frag_pos;
 
 layout (std140) uniform Matrices {
     mat4 projection;
@@ -24,6 +25,7 @@ void main() {
     gl_Position = clip_space;
     tex_coords = a_tex_coords * tiling;
 
-    to_camera = camera_position - vec3(position);
+    to_camera = vec3(position);
+    frag_pos = vec3(position);
 }
 
