@@ -44,6 +44,8 @@ void main() {
     distorted_tex_coords =
         tex_coords + vec2(distorted_tex_coords.x, distorted_tex_coords.y + move_factor);
 
+    // The normal map i'm using seems weird
+
     // vec3 normal = vec3(0.0f, 1.0f, 0.0f);
     vec3 norm = texture(normal_map, distorted_tex_coords).rgb;
     // vec3 normal = vec3(norm.r * 2.0 - 1.0, norm.g, norm.b * 2.0 - 1.0);
