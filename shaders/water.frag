@@ -54,7 +54,7 @@ void main() {
     vec3 view_pos = normalize(to_camera);
     float transparency = dot(view_pos, normal);
     transparency = pow(transparency, reflection_strength);
-    // transparency = clamp(transparency, 0.1, 0.9);
+    transparency = clamp(transparency, 0.0001, 0.9999);
 
     vec2 total_distortion = texture(flow_map, distorted_tex_coords).rg * 2.0 - 1.0;
     total_distortion *= wave_strength;
