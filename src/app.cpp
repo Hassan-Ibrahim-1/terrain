@@ -84,6 +84,8 @@ void App::init() {
 
     flow_map = Texture2D("textures/flow_map.png");
     normal_map = Texture2D("textures/water_normal2.png");
+
+    water_rect.transform.position.y = -0.5;
 }
 
 void App::update() {
@@ -93,12 +95,11 @@ void App::update() {
 
         utils::imgui_rect("refl rect", reflection_rect);
         utils::imgui_rect("refra rect", refraction_rect);
-        utils::imgui_rect("water rect", water_rect);
-
-        ImGui::DragFloat("gr boundary", &ground_boundary, 0.01);
-        if (ImGui::DragFloat("wt boundary", &water_boundary, 0.01)) {
+        if (utils::imgui_rect("water rect", water_rect)) {
             update_water_rect();
         }
+
+        ImGui::DragFloat("gr boundary", &ground_boundary, 0.01);
         utils::imgui_color_edit3("ground", ground_color);
         utils::imgui_color_edit3("grass", grass_color);
         utils::imgui_color_edit3("water", water_color);
@@ -145,7 +146,7 @@ void App::update() {
     );
 
     terrain_shader.set_float("ground_boundary", ground_boundary);
-    terrain_shader.set_float("water_boundary", water_boundary);
+    terrain_shader.set_float("water_boundary", water_rect.transform.position.y);
     terrain_shader.set_vec3("ground_color", ground_color.clamped_vec3());
     terrain_shader.set_vec3("grass_color", grass_color.clamped_vec3());
     terrain_shader.set_vec3("water_color", water_color.clamped_vec3());
@@ -157,10 +158,10 @@ void App::update() {
     refraction_rect.hidden = true;
 
     reflection_clip_plane = {
-        0, 1, 0, -water_boundary
+        0, 1, 0, -water_rect.transform.position.y
     };
     refraction_clip_plane = {
-        0, -1, 0, water_boundary
+        0, -1, 0, water_rect.transform.position.y
     };
 
     scene.hide_skybox();
@@ -176,7 +177,7 @@ void App::update() {
     renderer.send_texture_data(normal_map , water_shader, "normal_map", 3);
     renderer.send_light_data(water_shader);
 
-    move_factor += wave_speed * sin(glfwGetTime());
+    move_factor += wave_speed * glm::clamp(glfwGetTime(), 0.0001, 0.99999);
     water_shader.set_float("move_factor", move_factor);
     water_shader.set_float("reflection_strength", reflection_strength);
     water_shader.set_vec3("camera_position", camera.transform.position);
@@ -198,16 +199,17 @@ void App::cleanup() {
 
 void App::update_water_rect() {
     water_rect.transform.scale = terrain.gobj.transform.scale;
+    float og_y = water_rect.transform.position.y;
     water_rect.transform.position =
         terrain.gobj.transform.position + terrain.gobj.transform.scale / 2.0f;
     // idk why this is 1.5
     water_rect.transform.position.x =
         terrain.gobj.transform.position.x + terrain.gobj.transform.scale.x * 1.5;
-    water_rect.transform.position.y = water_boundary;
+    water_rect.transform.position.y = og_y;
 }
 
 void App::create_reflection_texture() {
-    float dist = 2 * (camera.transform.position.y - water_boundary);
+    float dist = 2 * (camera.transform.position.y - water_rect.transform.position.y);
     camera.transform.position.y -= dist;
     camera.invert_pitch();
 
