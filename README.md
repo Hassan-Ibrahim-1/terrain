@@ -1,7 +1,7 @@
 ![alt text](https://github.com/Hassan-Ibrahim-1/terrain/blob/master/demo-image/demo.png)
 
 ## About
-Terrain generation with some water.
+Terrain generation using fractal brownian motion with some water.
 
 ## Build instructions
 cd into dependencies/assimp and build that first following the build instructions provided.
