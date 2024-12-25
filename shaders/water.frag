@@ -74,9 +74,6 @@ void main() {
         vec4(material.color, 1) * mix(vec4(reflection_color, 1), vec4(refraction_color, 1), transparency);
     FragColor.rgb += result;
 
-    // if (FragColor.r <= 0.1) {
-    //     FragColor.r = 1;
-    // }
     // FragColor = vec4(normal, 1);
 }
 
