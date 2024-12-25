@@ -3,6 +3,18 @@
 -- Get rid of bounds and use terrain.gobj.transform
 -- figure out why scale moves the terrain - offset it?
 
+
+### Next up
+get rid of water_boundary
+add basic collision and a player
+ARTIFACTS AT THE TOP RIGHT OF THE WATER - next to the texture
+
+
+
+
+
+
+
 Water:
 separate water shader
 color ground blue in the first pass. have a second
