@@ -5,8 +5,9 @@
 
 
 ### Next up
-get rid of water_boundary
 add basic collision and a player
+
+-- get rid of water_boundary
 -- ARTIFACTS AT THE TOP RIGHT OF THE WATER - next to the texture
 
 
