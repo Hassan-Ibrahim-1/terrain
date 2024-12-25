@@ -58,9 +58,12 @@ public:
     size_t dir_lights_used() const;
     bool has_lights() const;
 
+    // Just call this to set a skybox
     void set_skybox(const std::array<std::string, 6>& skybox_textures);
     Skybox& get_skybox() { return _skybox; };
-    bool has_skybox() const { return _skybox.loaded(); }
+    bool has_skybox() const { return _skybox.loaded() && !_skybox_hidden; }
+    void hide_skybox() { _skybox_hidden = true; }
+    void show_skybox() { _skybox_hidden = false; }
 
     void clear_game_objects();
     void clear_lights();
@@ -72,6 +75,7 @@ private:
     size_t _n_dir_lights = 0;
 
     Skybox _skybox;
+    bool _skybox_hidden = false;
 
     // NOTE: super simple rn. just increments a counter and returns the result
     uint generate_id();

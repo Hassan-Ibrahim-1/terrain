@@ -14,6 +14,10 @@ public:
         }
     }
     /*
+     for converting pngs to skybox textures
+     compatible with this
+     https://matheowis.github.io/HDRI-to-CubeMap/
+
      Provide in the following order:
      right
      left

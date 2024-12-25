@@ -3,12 +3,22 @@
 #include "app.hpp"
 #include "debug.hpp"
 #include "framebuffer.hpp"
+#include "skybox.hpp"
 #include "utils.hpp"
 #include <cstdlib>
 #include <optional>
 
 void App::init() {
     engine::render_after_user_update = false;
+
+    scene.set_skybox({
+        "textures/skybox-sky/right.png",
+        "textures/skybox-sky/left.png",
+        "textures/skybox-sky/top.png",
+        "textures/skybox-sky/bottom.png",
+        "textures/skybox-sky/front.png",
+        "textures/skybox-sky/back.png",
+    });
 
     scene.add_point_light(&light);
     light.position.y = 5;
@@ -153,8 +163,10 @@ void App::update() {
         0, -1, 0, water_boundary
     };
 
+    scene.hide_skybox();
     create_reflection_texture();
     create_refraction_texture();
+    scene.show_skybox();
 
     // this is dumb
     water_rect.material.shader = &water_shader;
