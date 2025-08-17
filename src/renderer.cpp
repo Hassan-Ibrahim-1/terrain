@@ -9,7 +9,7 @@
 #include "engine.hpp"
 #include "fs.hpp"
 
-Renderer::Renderer(Camera &main_camera, Scene &scene)
+Renderer::Renderer(Camera& main_camera, Scene& scene)
     : main_camera(&main_camera), main_scene(&scene) {
     generate_circle_vertices();
     init_models();

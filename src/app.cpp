@@ -164,10 +164,10 @@ void App::update() {
         0, -1, 0, water_rect.transform.position.y
     };
 
-    scene.hide_skybox();
+    /*scene.hide_skybox();*/
     create_reflection_texture();
     create_refraction_texture();
-    scene.show_skybox();
+    /*scene.show_skybox();*/
 
     // this is dumb
     water_rect.material.shader = &water_shader;
