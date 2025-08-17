@@ -5,8 +5,8 @@
 
     .dependencies = .{
         .cimgui = .{
-            .url = "git+https://github.com/Hassan-Ibrahim-1/dcimgui.git#24f569f4a2ced2a5fafdce57799e9cc0b38fa570",
-            .hash = "cimgui-0.1.0-44ClkdMCSAA9-B8JCGet1LAhBJGXxUcg1oNOPUm-Cl0l",
+            .url = "git+https://github.com/Hassan-Ibrahim-1/dcimgui#bb09cd42acf93a8d6afe26c63ddb38821231f645",
+            .hash = "cimgui-0.1.0-44ClkXMDSABZE62kZoDX4E40fA8M604vSp5QyS0kfMW_",
         },
     },
 
