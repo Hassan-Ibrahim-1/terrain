@@ -64,7 +64,7 @@ GLFWwindow *Window::create_window() {
                             static_cast<float>(_height) * yscale,
                             _title.c_str(), monitor, NULL);
 #else
-  _window = glfwCreateWindow(_width, _height, _title.c_str(), NULL, NULL);
+  window = glfwCreateWindow(_width, _height, _title.c_str(), NULL, NULL);
 #endif
 
   ASSERT(window != nullptr, "Bad window intialization");
