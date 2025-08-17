@@ -1,0 +1,20 @@
+.{
+    .name = .terrain_gen,
+
+    .version = "0.0.0",
+
+    .dependencies = .{
+        .cimgui = .{
+            .url = "git+https://github.com/Hassan-Ibrahim-1/dcimgui.git#24f569f4a2ced2a5fafdce57799e9cc0b38fa570",
+            .hash = "cimgui-0.1.0-44ClkdMCSAA9-B8JCGet1LAhBJGXxUcg1oNOPUm-Cl0l",
+        },
+    },
+
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+
+    .fingerprint = 0x6adce31430c5560c,
+}
