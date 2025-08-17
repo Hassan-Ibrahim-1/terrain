@@ -80,7 +80,7 @@ pub fn build(b: *std.Build) void {
 
     b.installArtifact(exe);
 
-    const run_app = b.addSystemCommand(&.{ "zig", "build", "run" });
+    const run_app = b.addRunArtifact(exe);
     const run_app_step = b.step("run", "Run the app module");
     run_app_step.dependOn(&run_app.step);
 }
