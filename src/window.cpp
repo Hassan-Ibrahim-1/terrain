@@ -1,3 +1,5 @@
+// TODO: fix formatting in this file
+
 #include "debug.hpp"
 #include <glad/glad.h>
 
@@ -11,15 +13,17 @@ Window::Window(uint width, uint height, const std::string &title,
     : _width(width), _height(height), _title(title) {
   _window = create_window();
   glfwMakeContextCurrent(_window);
+  load_opengl_functions();
   // Sets a default basic frame buffer size callback
   glfwSetFramebufferSizeCallback(_window, default_framebuffer_size_callback);
-  load_opengl_functions();
   if (enable_msaa) {
     glfwWindowHint(GLFW_SAMPLES, 4);
     glEnable(GL_MULTISAMPLE);
     LOG("MSAA enabled");
   }
-  glViewport(0, 0, width * 2, height * 2);
+#ifdef __linux__
+  glViewport(0, 0, _width, _height);
+#endif
   _loaded = true;
 }
 
@@ -50,8 +54,19 @@ void Window::disable_cursor() {
 }
 
 GLFWwindow *Window::create_window() {
-  GLFWwindow *window =
-      glfwCreateWindow(_width, _height, _title.c_str(), NULL, NULL);
+  GLFWwindow *window = nullptr;
+#ifdef __linux__
+  auto *monitor = glfwGetPrimaryMonitor();
+  float xscale = 0.0;
+  float yscale = 0.0;
+  glfwGetMonitorContentScale(monitor, &xscale, &yscale);
+  window = glfwCreateWindow(static_cast<float>(_width) * xscale,
+                            static_cast<float>(_height) * yscale,
+                            _title.c_str(), monitor, NULL);
+#else
+  _window = glfwCreateWindow(_width, _height, _title.c_str(), NULL, NULL);
+#endif
+
   ASSERT(window != nullptr, "Bad window intialization");
   return window;
 }
