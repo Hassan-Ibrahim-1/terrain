@@ -4,6 +4,8 @@
 Terrain generation using fractal brownian motion with some water.
 
 ## Build instructions
-cd into dependencies/assimp and build that first following the build instructions provided.
+Make sure you have zig 0.14 installed and that you have assimp, glfw and libjpeg installed on your system
+and then run
+`zig build run`
 
 Go back into the project directory and run `premake run` to compile. Should just work on M-series Macs
