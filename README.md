@@ -4,6 +4,6 @@
 Terrain generation using fractal brownian motion with some water.
 
 ## Build instructions
-Make sure you have zig 0.14, assimp, glfw and libjpeg installed on your system
+Make sure you have zig 0.14, assimp, glfw, glm and libjpeg installed on your system
 and then run
 `zig build run`
